@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+</head>
+<body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const optionButtons = document.querySelectorAll('.buttons input');
+            const restartButton = document.querySelector('.restartButton input');
+            let playerScore = 0;
+            let computerScore = 0;
+            let roundNumber = 0;
+            let parsedComputer = "";
+            let parsedPlayer = "";
+
+            //Add the playRound function to the Rock, Paper, and Scissors input buttons
+            optionButtons.forEach(optionButton => {
+                optionButton.addEventListener('click', function() {
+                    playRound(parseInt(optionButton.id));
+                });
+            });
+            
+            //Add the restartGame() function to the Play Again! input button
+            restartButton.addEventListener('click', function() {
+                restartGame();
+            });
+
+            //Disable and hide the Play Again! input button
+            restartButton.disabled=true;
+            restartButton.hidden=true;
+
+            //Randomly generate Computer Choice
+            function getComputerChoice() {
+            let number = Math.floor(Math.random() * 3) + 1;
+            console.log("Computer Choice: " + number);
+            return number;
+            }
+
+            //Play a round of Rock, Paper, Scissors
+            function playRound(playerChoice) {
+                let computerChoice = getComputerChoice();
+                console.log("Player Choice: " + playerChoice);
+
+                //Parse the choice into a string to output to HTML
+                if (computerChoice == 1 || playerChoice == 1) {
+                    if (computerChoice == 1) {
+                        parsedComputer = "Rock";
+                    }
+                    else {
+                        parsedPlayer = "Rock";
+                    }
+                }
+                if (computerChoice == 2 || playerChoice == 2) {
+                    if (computerChoice == 2) {
+                        parsedComputer = "Paper";
+                    }
+                    else {
+                        parsedPlayer = "Paper";
+                    }
+                }
+                if (computerChoice == 3 || playerChoice == 3) {
+                    if (computerChoice == 3) {
+                        parsedComputer = "Scissors";
+                    }
+                    else {
+                        parsedPlayer = "Scissors";
+                    }
+                }
+
+                //Determine the victor of the round and output results
+                if (playerChoice == 1 && computerChoice == 2 || playerChoice == 2 && computerChoice == 3 || playerChoice == 3 && computerChoice == 1) {
+                    playerScore++;
+                    roundNumber++;
+                    document.getElementById("playerChoice").innerHTML = "Player Choice: " + parsedPlayer;
+                    document.getElementById("computerChoice").innerHTML = "Computer Choice: " + parsedComputer;
+                    document.getElementById("roundResult").innerHTML = "You win the round!";
+                    document.getElementById("playerScore").innerHTML = "Player Score: " + playerScore;
+                    document.getElementById("roundNumber").innerHTML = "Round Number: " + roundNumber;
+                }
+                else if (playerChoice == computerChoice) {
+                    roundNumber++;
+                    document.getElementById("playerChoice").innerHTML = "Player Choice: " + parsedPlayer;
+                    document.getElementById("computerChoice").innerHTML = "Computer Choice: " + parsedComputer;
+                    document.getElementById("roundResult").innerHTML = "Uh Oh! You both picked the same thing!";
+                    document.getElementById("roundNumber").innerHTML = "Round Number: " + roundNumber;
+                }
+                else {
+                    computerScore++;
+                    roundNumber++;
+                    document.getElementById("playerChoice").innerHTML = "Player Choice: " + parsedPlayer;
+                    document.getElementById("computerChoice").innerHTML = "Computer Choice: " + parsedComputer;
+                    document.getElementById("roundResult").innerHTML = "You lose the round!";
+                    document.getElementById("roundNumber").innerHTML = "Round Number: " + roundNumber;
+                    document.getElementById("computerScore").innerHTML = "Computer Score: " + computerScore;
+                }
+
+                //Determine if anyone has 5 points, if so end the game
+                if (playerScore == 5) {
+                    document.getElementById("gameResult").innerHTML = "You beat the computer and won the game! Press the button below to restart the game!";
+                    gameOver();
+                }
+                else if (computerScore == 5) {
+                    document.getElementById("gameResult").innerHTML = "The computer beat you! Oh no! Press the button below to restart the game and try again!";
+                    gameOver();
+                }
+            }
+
+            //End the game, reveal the Play Again! button
+            function gameOver() {
+                optionButtons.forEach(optionButton => {
+                    optionButton.disabled=true;
+                });
+                restartButton.disabled=false;
+                restartButton.hidden=false;
+            }
+
+            //Reloads the page to start the game again.
+            function restartGame() {
+                location.reload()
+            }
+        });
+    </script>
+    <h1> Lets Play Rock Paper Scissors!</h1>
+    <h3> The first to 5 points wins!</h3>
+    <div class="buttons">
+        <input type="button" id="1" value="Rock">
+        <input type="button" id="2" value="Paper">
+        <input type="button" id="3" value="Scissors">
+    </div>
+    <br>
+    <div class="playerChoice" id="playerChoice">Player Choice:</div>
+    <br>
+    <div class="computerChoice" id="computerChoice">Computer Choice:</div>
+    <br>
+    <div class="roundResult" id="roundResult">Who will win the round?</div>
+    <br>
+    <div class="roundNumber" id="roundNumber">Round Number: 0</div>
+    <br>
+    <div class="gameScores" id="gameScores">
+        <span id="playerScore">Player Score: 0</span>
+        <span id="computerScore">Computer Score: 0</span>
+    </div>
+    <br>
+    <div class="gameResult" id ="gameResult"></div>
+    <br>
+    <div class="restartButton" id="restartButton">
+        <input type="button" id="restart" value="Restart Game!">
+    </div>
+</body>
+</html>
